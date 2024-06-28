@@ -1,5 +1,5 @@
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const KeywordSearchScreen = () => {
@@ -8,16 +8,20 @@ const KeywordSearchScreen = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        if (query.length > 2) {
-            searchMovies(query);
-        } else {
-            setMovies([]);
-        }
+        const searchTimeout = setTimeout(() => {
+            if (query.length > 2) {
+                searchMovies(query);
+            } else {
+                setMovies([]);
+            }
+        }, 300);
+
+        return () => clearTimeout(searchTimeout);
     }, [query]);
 
-    const searchMovies = async (searchQuery) => {
+    const searchMovies = async (searchQuery: string) => {
         try {
-            const url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}`
+            const url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}`;
             const options = {
                 method: 'GET',
                 headers: {
@@ -28,7 +32,6 @@ const KeywordSearchScreen = () => {
 
             const response = await fetch(url, options);
             const data = await response.json();
-            // console.log('API Response:', data);
             setMovies(data.results || []);
         } catch (error) {
             console.log('Error fetching movies:', error);
@@ -38,9 +41,7 @@ const KeywordSearchScreen = () => {
     const renderMovieItem = ({ item }) => (
         <TouchableOpacity
             style={styles.movieContainer}
-            onPress={() => {
-                navigation.navigate('Movie Detail', { id: item.id });
-            }}
+            onPress={() => navigation.navigate('Movie Detail', { id: item.id })}
         >
             <Image
                 source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }}
@@ -59,16 +60,13 @@ const KeywordSearchScreen = () => {
                 style={styles.searchInput}
                 placeholder="Search by title"
                 value={query}
-                onChangeText={(text) => {
-                    setQuery(text)
-                    searchMovies(query)
-                }}
+                onChangeText={setQuery}
             />
             <FlatList
                 data={movies}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderMovieItem}
-                ListEmptyComponent={<Text>No movies found</Text>}
+                ListEmptyComponent={<Text style={styles.noFavoriteMovies}>No movies found</Text>}
             />
         </View>
     );
@@ -107,6 +105,11 @@ const styles = StyleSheet.create({
     },
     movieRating: {
         fontSize: 14,
+        color: '#666',
+    },
+    noFavoriteMovies: {
+        fontSize: 16,
+        textAlign: 'center',
         color: '#666',
     },
 });
