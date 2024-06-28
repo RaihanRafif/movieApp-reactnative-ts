@@ -27,7 +27,7 @@ const SignupScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
-            <Text>Signup</Text>
+            <Text style={styles.signUpText}>SIGN UP</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -58,6 +58,11 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         borderWidth: 1,
         borderRadius: 5,
+    },
+    signUpText: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
 });
 
