@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "components/ThemedText.tsx", "components/ThemedView.tsx", "components/HelloWave.tsx", "components/ExternalLink.tsx", "components/Collapsible.tsx"  ]
 }
