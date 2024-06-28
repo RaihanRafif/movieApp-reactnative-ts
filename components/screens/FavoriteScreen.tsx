@@ -76,7 +76,9 @@ export default function FavoriteScreen() {
           </TouchableOpacity>
         ))
       ) : (
-        <Text style={{ color: colors.text }}>No favorite movies found.</Text>
+        <View style={styles.noFavoriteContainer}>
+          <Text style={styles.noFavoriteText}>No favorite movies found.</Text>
+        </View>
       )}
     </View>
   );
@@ -120,5 +122,14 @@ const styles = StyleSheet.create({
   rating: {
     fontWeight: '700',
     marginLeft: 5,
+  },
+  noFavoriteContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noFavoriteText: {
+    fontSize: 18,
+    color: "#a0a0a0",
   },
 });
