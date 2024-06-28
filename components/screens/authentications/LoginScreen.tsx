@@ -1,12 +1,14 @@
-// LoginScreen.tsx
-import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { AuthContext } from './AuthContext';
+import { useTheme } from '@/components/ThemeContext';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const authContext = useContext(AuthContext);
+    const { colors } = useTheme();
 
     const handleLogin = () => {
         if (authContext) {
@@ -14,23 +16,35 @@ const LoginScreen = () => {
         }
     };
 
+    const handleSignUp = () => {
+        navigation.navigate('Signup');
+    };
+
+    useEffect(() => {
+        if (authContext?.error) {
+            Alert.alert('Login Failed', authContext.error);
+        }
+    }, [authContext?.error]);
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.loginText}>Login</Text>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <Text style={[styles.loginText, { color: colors.text }]}>Login</Text>
             <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
             />
             <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.text, marginBottom: 20, borderColor: colors.tint }]}
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
             />
             <Button title="Login" onPress={handleLogin} />
+            <Text style={[styles.signupText, { color: colors.text }]}>Has no account?</Text>
+            <Button title="Sign Up" onPress={handleSignUp} />
         </View>
     );
 };
@@ -51,6 +65,11 @@ const styles = StyleSheet.create({
     loginText: {
         fontSize: 32,
         fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    signupText: {
+        marginTop: 20,
+        fontSize: 16,
         marginBottom: 10,
     },
 });

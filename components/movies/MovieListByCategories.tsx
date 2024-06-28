@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react
 import { useNavigation, StackActions, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/constants/RootStackParamList';
+import { useTheme } from '../ThemeContext';
 
 type Movie = {
     id: number;
@@ -19,6 +20,7 @@ const MovieListByCategories: React.FC<MovieListByCategoriesProps> = ({ route }) 
     const { categoryId } = route.params;
     const [movies, setMovies] = useState<Movie[]>([]);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const { colors } = useTheme();
 
     useEffect(() => {
         fetchMovies();
@@ -49,7 +51,7 @@ const MovieListByCategories: React.FC<MovieListByCategoriesProps> = ({ route }) 
             onPress={() => {
                 navigation.dispatch(StackActions.push('Movie Detail', { id: item.id }));
             }}
-            style={styles.movieContainer}
+            style={[styles.movieContainer, { backgroundColor: colors.background }]}
         >
             <View>
                 <Image
@@ -65,7 +67,7 @@ const MovieListByCategories: React.FC<MovieListByCategoriesProps> = ({ route }) 
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
             <FlatList
                 data={movies}
                 keyExtractor={(item) => item.id.toString()}

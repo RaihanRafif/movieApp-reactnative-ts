@@ -22,6 +22,7 @@ type MovieItemProps = {
 
 const MovieItem: React.FC<MovieItemProps> = ({ movie, size, coverType }) => {
     const navigation = useNavigation();
+    // const { colors } = useTheme();
 
     return (
         <TouchableOpacity

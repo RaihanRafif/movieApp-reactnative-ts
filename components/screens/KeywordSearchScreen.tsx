@@ -1,11 +1,24 @@
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type Movie = {
+    id: number;
+    poster_path: string | null;
+    title: string;
+    vote_average: number;
+};
+
+type RootStackParamList = {
+    'Movies By Category': { id: string };
+    'Movie Detail': { id: number }; // Define 'Movie Detail' screen with id as number
+};
 
 const KeywordSearchScreen = () => {
     const [query, setQuery] = useState('');
-    const [movies, setMovies] = useState([]);
-    const navigation = useNavigation();
+    const [movies, setMovies] = useState<Movie[]>([]);
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>(); // No need to specify <RootStackParamList>, it's inferred
 
     useEffect(() => {
         if (query.length > 2) {
@@ -15,9 +28,9 @@ const KeywordSearchScreen = () => {
         }
     }, [query]);
 
-    const searchMovies = async (searchQuery) => {
+    const searchMovies = async (searchQuery: string) => {
         try {
-            const url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}`
+            const url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}`;
             const options = {
                 method: 'GET',
                 headers: {
@@ -28,22 +41,26 @@ const KeywordSearchScreen = () => {
 
             const response = await fetch(url, options);
             const data = await response.json();
-            // console.log('API Response:', data);
-            setMovies(data.results || []);
+            if (data.results) {
+                // Asserting data.results to be an array of Movie
+                setMovies(data.results as Movie[]);
+            } else {
+                setMovies([]);
+            }
         } catch (error) {
-            console.log('Error fetching movies:', error);
+            console.error('Error fetching movies:', error);
         }
     };
 
-    const renderMovieItem = ({ item }) => (
+    const renderMovieItem = ({ item }: { item: Movie }) => (
         <TouchableOpacity
             style={styles.movieContainer}
             onPress={() => {
-                navigation.navigate('Movie Detail', { id: item.id });
+                navigation.navigate('Movie Detail', { id: item.id }); // Use navigation object to navigate
             }}
         >
             <Image
-                source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }}
+                source={{ uri: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://via.placeholder.com/50x75.png?text=No+Image' }}
                 style={styles.poster}
             />
             <View style={styles.movieInfo}>
@@ -60,8 +77,8 @@ const KeywordSearchScreen = () => {
                 placeholder="Search by title"
                 value={query}
                 onChangeText={(text) => {
-                    setQuery(text)
-                    searchMovies(query)
+                    setQuery(text);
+                    searchMovies(text); // Use text instead of query here
                 }}
             />
             <FlatList

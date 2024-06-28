@@ -2,19 +2,22 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { AuthContext } from './AuthContext';
+import { useTheme } from '@/components/ThemeContext';
+
 
 const SignupScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const authContext = useContext(AuthContext);
+    const { colors } = useTheme();
 
     const handleSignup = () => {
         if (!email || !password) {
             Alert.alert('Error', 'Please fill in all fields.');
             return;
         }
-
-        if (authContext) {
+        
+        if (authContext) {            
             authContext.signup(email, password);
             Alert.alert('Success', 'Registration successful!', [
                 {
@@ -26,16 +29,16 @@ const SignupScreen = ({ navigation }: any) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.signUpText}>SIGN UP</Text>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <Text style={[styles.signUpText, { color: colors.text }]}>SIGN UP</Text>
             <TextInput
-                style={styles.input}
+               style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
             />
             <TextInput
-                style={styles.input}
+               style={[styles.input, { color: colors.text, borderColor: colors.tint }]}
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}

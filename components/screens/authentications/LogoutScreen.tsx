@@ -1,25 +1,40 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import { AuthContext } from './AuthContext';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-const LogoutScreen = ({ navigation }: any) => {
+type RootStackParamList = {
+    Home: undefined;
+    Search: undefined;
+    Favorite: undefined;
+    Auth: undefined;
+    Logout: undefined;
+};
+
+const LogoutScreen = () => {
     const authContext = useContext(AuthContext);
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         if (authContext) {
-            authContext.logout(); 
-            navigation.navigate('Login'); 
+            await authContext.logout();
+            navigation.navigate('Home'); // Navigate to the Home screen after logout
         }
     };
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Logging out...</Text>
-            {/* Example: You can add a button to trigger logout */}
+        <View style={styles.container}>
             <Button title="Logout" onPress={handleLogout} />
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
 
 export default LogoutScreen;

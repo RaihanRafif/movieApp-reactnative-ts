@@ -25,6 +25,7 @@ export default function FavoriteScreen() {
   const getFavorite = async () => {
     try {
       const moviesFavorite = await AsyncStorage.getItem('@FavoriteList');
+
       if (moviesFavorite) {
         const parsedMovies = JSON.parse(moviesFavorite) as Movie[];
         setMovies(parsedMovies);

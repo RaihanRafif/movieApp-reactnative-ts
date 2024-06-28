@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StatusBar, StyleSheet, SafeAreaView, ScrollView, Platform } from 'react-native';
+import { View, StatusBar, StyleSheet, SafeAreaView, ScrollView, } from 'react-native';
 import MovieList from '../movies/MovieList';
 import { useTheme } from '../ThemeContext';
 
@@ -15,7 +15,6 @@ const movieLists: MovieListData[] = [
         title: 'Now Playing in Theater',
         path: 'movie/now_playing?language=en-US&page=1',
         coverType: 'backdrop',
-        isCarousel: true,
     },
     {
         title: 'Upcoming Movies',
@@ -43,6 +42,7 @@ const HomeScreen = () => {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {movieLists.map((movieList) => (
                     <View key={movieList.title} style={styles.movieListContainer}>
+                        {/* Example header styling */}
                         <MovieList
                             title={movieList.title}
                             path={movieList.path}
@@ -58,7 +58,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        // paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     scrollContainer: {
         paddingVertical: 16,
@@ -67,6 +67,22 @@ const styles = StyleSheet.create({
     movieListContainer: {
         marginBottom: 16,
         width: '100%',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 8,
+        paddingHorizontal: 16,
+    },
+    purpleLabel: {
+        width: 8,
+        height: 8,
+        backgroundColor: '#6B3EFF',
+        marginRight: 8,
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
 

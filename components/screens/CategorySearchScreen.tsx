@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTheme } from '../ThemeContext';
 
 type RootStackParamList = {
     'Movies By Category': { categoryId: number };
@@ -16,6 +17,7 @@ const CategorySearchScreen = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const { colors } = useTheme();
 
     useEffect(() => {
         getCategories();
@@ -64,8 +66,8 @@ const CategorySearchScreen = () => {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-            <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-                <Text style={styles.searchButtonText}>Search</Text>
+            <TouchableOpacity style={[styles.searchButton, { backgroundColor: colors.tabIconSelected }]} onPress={handleSearch}>
+                <Text style={[styles.searchButtonText, { backgroundColor: colors.tabIconSelected }]}>Search</Text>
             </TouchableOpacity>
         </View>
     );
@@ -85,12 +87,12 @@ const styles = StyleSheet.create({
         width: '40%',
         padding: 8,
         margin: 5,
-        backgroundColor: '#C0B4D5',
+        backgroundColor: '#687076',
         borderRadius: 10,
         alignItems: 'center',
     },
     selectedCategory: {
-        backgroundColor: '#8978A4',
+        backgroundColor: '#0a7ea4',
     },
     categoryText: {
         color: 'white',
@@ -100,7 +102,6 @@ const styles = StyleSheet.create({
     searchButton: {
         width: '60%',
         padding: 15,
-        backgroundColor: '#8978A4',
         borderRadius: 10,
         alignItems: 'center',
         marginTop: 10,

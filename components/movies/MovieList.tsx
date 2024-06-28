@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import MovieItem from './MovieItem';
+import { useTheme } from '../ThemeContext'; // Adjust the import path based on your project structure
 
 type Movie = {
     id: number;
@@ -29,6 +30,7 @@ const coverImageSize = {
 
 const MovieList: React.FC<MovieListProps> = ({ title, path, coverType }) => {
     const [movies, setMovies] = useState<Movie[]>([]);
+    const { colors } = useTheme(); // Accessing theme colors
 
     useEffect(() => {
         getMovieList();
@@ -55,8 +57,8 @@ const MovieList: React.FC<MovieListProps> = ({ title, path, coverType }) => {
     return (
         <View>
             <View style={styles.header}>
-                <View style={styles.purpleLabel}></View>
-                <Text style={styles.title}>{title}</Text>
+                <View style={[styles.purpleLabel, { backgroundColor: colors.icon }]}></View>
+                <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
             </View>
             <FlatList
                 style={{
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
         width: 20,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#8978A4',
         marginRight: 12,
     },
     title: {

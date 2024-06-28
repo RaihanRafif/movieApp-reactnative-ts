@@ -3,9 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthContextType = {
   user: string | null;
+  error: string | null;
   login: (email: string, password: string) => void;
   signup: (email: string, password: string) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -16,6 +17,7 @@ type AuthProviderProps = {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -35,17 +37,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userData = JSON.parse(storedUser);
       if (userData.email === email && userData.password === password) {
         setUser(email);
+        setError(null);
         await AsyncStorage.setItem('@currentUser', email);
+      } else {
+        setError('Invalid email or password');
       }
+    } else {
+      setError('No user found');
     }
   };
 
   const signup = async (email: string, password: string) => {
-    console.log("3333");
-
     const userData = { email, password };
     await AsyncStorage.setItem('@user', JSON.stringify(userData));
     setUser(email);
+    setError(null);
     await AsyncStorage.setItem('@currentUser', email);
   };
 
@@ -55,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, error, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
