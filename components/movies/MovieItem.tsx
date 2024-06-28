@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
     },
     movieTitle: {
         color: 'white',
+        fontSize: 16,
+        fontWeight: 'semibold',
     },
     gradientStyle: {
         padding: 8,
