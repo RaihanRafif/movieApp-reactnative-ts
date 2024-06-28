@@ -16,7 +16,7 @@ const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Login</Text>
+            <Text style={styles.loginText}>Login</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -47,6 +47,11 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         borderWidth: 1,
         borderRadius: 5,
+    },
+    loginText: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
 });
 
