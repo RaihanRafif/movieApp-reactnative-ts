@@ -26,6 +26,11 @@ const MovieDetail: React.FC<MovieDetailProps> = ({ route }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   // const navigation = useNavigation();
 
+  if (!authContext) {
+    // Handle case where authContext is null
+    return null; // Or return a loading indicator, error message, or handle appropriately
+}
+
   useEffect(() => {
     getMovieList();
   }, []);
@@ -84,19 +89,19 @@ const MovieDetail: React.FC<MovieDetailProps> = ({ route }) => {
   const addFavorite = async (movie: any) => {
     if (authContext && authContext.user) {
       try {
-        const initialData = await AsyncStorage.getItem('@FavoriteList');
+        const initialData = await AsyncStorage.getItem(`@FavoriteList_${authContext.user}`);
         let favMovieList = initialData ? JSON.parse(initialData) : [];
 
         // Check if movie already exists in favorites
         const existingIndex = favMovieList.findIndex((m: any) => m.id === movie.id);
         if (existingIndex === -1) {
           favMovieList = [...favMovieList, movie];
-          await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
+          await AsyncStorage.setItem(`@FavoriteList_${authContext.user}`, JSON.stringify(favMovieList));
           setIsFavorite(true);
         } else {
           // Remove from favorites if already exists
           favMovieList.splice(existingIndex, 1);
-          await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
+          await AsyncStorage.setItem(`@FavoriteList_${authContext.user}`, JSON.stringify(favMovieList));
           setIsFavorite(false);
         }
       } catch (error) {
@@ -114,14 +119,14 @@ const MovieDetail: React.FC<MovieDetailProps> = ({ route }) => {
 
   const removeFavorite = async (id: number) => {
     try {
-      const initialData = await AsyncStorage.getItem('@FavoriteList');
+      const initialData = await AsyncStorage.getItem(`@FavoriteList_${authContext.user}`);
       const favMovieList = initialData ? JSON.parse(initialData) : [];
-
+  
       // Find index of movie to remove
       const indexToRemove = favMovieList.findIndex((movie: any) => movie.id === id);
       if (indexToRemove !== -1) {
         favMovieList.splice(indexToRemove, 1);
-        await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
+        await AsyncStorage.setItem(`@FavoriteList_${authContext.user}`, JSON.stringify(favMovieList));
         setIsFavorite(false);
       }
     } catch (error) {

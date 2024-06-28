@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import LoginScreen from '../screens/authentications/LoginScreen';
 import { AuthContext } from '../screens/authentications/AuthContext';
 import SignupScreen from '../screens/authentications/SignupScreen';
+import LogoutScreen from '../screens/authentications/LogoutScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -80,18 +81,7 @@ const NavigationBottom = () => {
             ) : (
                 <Tab.Screen
                     name="Logout"
-                    component={() => null} // Dummy screen, handled in the onPress below
-                    listeners={({ navigation }) => ({
-                        tabPress: (e) => {
-                            e.preventDefault(); // Prevents default behavior of tab press
-                            authContext.logout(); // Logout function from AuthContext
-                            // Navigate to Login screen after logout
-                            navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'Login' }]
-                            });
-                        },
-                    })}
+                    component={LogoutScreen} // Use a LogoutScreen component for logout handling
                     options={{
                         tabBarIcon: ({ color }) => (
                             <Feather name="log-out" size={28} color={color} />
