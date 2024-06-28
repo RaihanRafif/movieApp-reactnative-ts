@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StatusBar, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, StatusBar, StyleSheet, SafeAreaView, ScrollView, Platform } from 'react-native';
 import MovieList from '../movies/MovieList';
 import { useTheme } from '../ThemeContext';
 
@@ -39,6 +39,7 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar translucent backgroundColor={colors.background} />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {movieLists.map((movieList) => (
                     <View key={movieList.title} style={styles.movieListContainer}>
@@ -50,7 +51,6 @@ const HomeScreen = () => {
                     </View>
                 ))}
             </ScrollView>
-            <StatusBar translucent={false} backgroundColor={colors.background} />
         </SafeAreaView>
     );
 };
@@ -58,6 +58,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     scrollContainer: {
         paddingVertical: 16,

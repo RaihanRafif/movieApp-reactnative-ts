@@ -5,6 +5,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'; // Imp
 import { StackActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
+import { useTheme } from '../ThemeContext'; // Import the useTheme hook
 
 const screenWidth = Dimensions.get('window').width;
 const movieContainerWidth = (screenWidth - 40) / 3; // 40 is for padding and margin adjustments
@@ -19,6 +20,7 @@ type Movie = {
 export default function FavoriteScreen() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const navigation = useNavigation();
+  const { colors } = useTheme(); // Get the colors from the theme
 
   const getFavorite = async () => {
     try {
@@ -41,7 +43,7 @@ export default function FavoriteScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {movies.length > 0 ? (
         movies.map((movie) => (
           <TouchableOpacity
@@ -64,17 +66,17 @@ export default function FavoriteScreen() {
                 locations={[0.6, 0.8]}
                 style={styles.gradientStyle}
               >
-                <Text style={styles.movieTitle}>{movie.title}</Text>
+                <Text style={[styles.movieTitle, { color: colors.text }]}>{movie.title}</Text>
                 <View style={styles.ratingContainer}>
                   <FontAwesome name="star" size={16} color="yellow" />
-                  <Text style={styles.rating}>{movie.vote_average.toFixed(1)}</Text>
+                  <Text style={[styles.rating, { color: colors.text }]}>{movie.vote_average.toFixed(1)}</Text>
                 </View>
               </LinearGradient>
             </ImageBackground>
           </TouchableOpacity>
         ))
       ) : (
-        <Text>No favorite movies found.</Text>
+        <Text style={{ color: colors.text }}>No favorite movies found.</Text>
       )}
     </View>
   );
@@ -100,7 +102,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   movieTitle: {
-    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
@@ -117,7 +118,6 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   rating: {
-    color: 'yellow',
     fontWeight: '700',
     marginLeft: 5,
   },

@@ -22,8 +22,8 @@ const coverImageSize = {
         height: 160,
     },
     poster: {
-        width: 100,
-        height: 160,
+        width: 200,
+        height: 300,
     },
 };
 

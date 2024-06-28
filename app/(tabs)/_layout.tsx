@@ -1,12 +1,15 @@
 import React from 'react';
 import NavigationBottom from '@/components/navigations/NavigationBottom';
 import { ThemeProvider } from '@/components/ThemeContext';
+import { AuthProvider } from '@/components/screens/authentications/AuthContext';
 
 export default function TabLayout() {
 
   return (
-    <ThemeProvider>
-      <NavigationBottom />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <NavigationBottom />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
