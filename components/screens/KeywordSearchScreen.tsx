@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-const KeywordSearchScreen = () => {
-    const [query, setQuery] = useState('');
-    const [movies, setMovies] = useState([]);
+const KeywordSearchScreen: React.FC = () => {
+    const [query, setQuery] = useState<string>('');
+    const [movies, setMovies] = useState<any[]>([]);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const KeywordSearchScreen = () => {
         }
     };
 
-    const renderMovieItem = ({ item }) => (
+    const renderMovieItem = ({ item }: { item: any }) => (
         <TouchableOpacity
             style={styles.movieContainer}
             onPress={() => navigation.navigate('Movie Detail', { id: item.id })}
