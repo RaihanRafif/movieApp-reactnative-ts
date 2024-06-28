@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteProp } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import { Alert, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import MovieList from './MovieList';
 import { useTheme } from '../ThemeContext';
-import { AuthContext } from '../screens/authentications/AuthContext';
 
 type RootStackParamList = {
   'Movie Detail': { id: number };
@@ -20,16 +19,9 @@ type MovieDetailProps = {
 const MovieDetail: React.FC<MovieDetailProps> = ({ route }) => {
   const { id } = route.params;
   const { colors } = useTheme();
-  const authContext = useContext(AuthContext);
 
   const [moviesDetail, setMovieDetail] = useState<any>(null);
   const [isFavorite, setIsFavorite] = useState(false);
-  // const navigation = useNavigation();
-
-  if (!authContext) {
-    // Handle case where authContext is null
-    return null; // Or return a loading indicator, error message, or handle appropriately
-}
 
   useEffect(() => {
     getMovieList();
@@ -87,46 +79,34 @@ const MovieDetail: React.FC<MovieDetailProps> = ({ route }) => {
   };
 
   const addFavorite = async (movie: any) => {
-    if (authContext && authContext.user) {
-      try {
-        const initialData = await AsyncStorage.getItem(`@FavoriteList_${authContext.user}`);
-        let favMovieList = initialData ? JSON.parse(initialData) : [];
-
-        // Check if movie already exists in favorites
-        const existingIndex = favMovieList.findIndex((m: any) => m.id === movie.id);
-        if (existingIndex === -1) {
-          favMovieList = [...favMovieList, movie];
-          await AsyncStorage.setItem(`@FavoriteList_${authContext.user}`, JSON.stringify(favMovieList));
-          setIsFavorite(true);
-        } else {
-          // Remove from favorites if already exists
-          favMovieList.splice(existingIndex, 1);
-          await AsyncStorage.setItem(`@FavoriteList_${authContext.user}`, JSON.stringify(favMovieList));
-          setIsFavorite(false);
-        }
-      } catch (error) {
-        console.log(error);
+    try {
+      if (!movie.id) {
+        throw 'Movie data is deprecated';
       }
-    } else {
-      // Alert user to sign in
-      Alert.alert(
-        "Sign In Required",
-        "Please sign in to use the favorite feature.",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-      );
+      const initialData = await AsyncStorage.getItem('@FavoriteList');
+
+      let favMovieList = [];
+
+      if (initialData !== null) {
+        favMovieList = [...JSON.parse(initialData), movie];
+      } else {
+        favMovieList = [movie];
+      }
+
+      await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
+      setIsFavorite(true);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const removeFavorite = async (id: number) => {
     try {
-      const initialData = await AsyncStorage.getItem(`@FavoriteList_${authContext.user}`);
-      const favMovieList = initialData ? JSON.parse(initialData) : [];
-  
-      // Find index of movie to remove
-      const indexToRemove = favMovieList.findIndex((movie: any) => movie.id === id);
-      if (indexToRemove !== -1) {
-        favMovieList.splice(indexToRemove, 1);
-        await AsyncStorage.setItem(`@FavoriteList_${authContext.user}`, JSON.stringify(favMovieList));
+      const initialData = await AsyncStorage.getItem('@FavoriteList');
+      if (initialData) {
+        let favMovieList = JSON.parse(initialData);
+        favMovieList = favMovieList.filter((movie: any) => movie.id !== id);
+        await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
         setIsFavorite(false);
       }
     } catch (error) {
@@ -233,7 +213,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
-    marginTop: 20,
     marginRight: 20,
     marginLeft: 20,
   },
@@ -269,7 +248,7 @@ const styles = StyleSheet.create({
     gap: 10,
     width: '100%',
     paddingLeft: 20,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   sideContainer: {
     width: '40%',

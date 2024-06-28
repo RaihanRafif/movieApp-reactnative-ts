@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import HomeStackNavigation from './HomeStackNavigation';
@@ -6,21 +6,21 @@ import SearchStackNavigation from './SearchStackNavigation';
 import FavoriteStackNavigation from './FavoriteStackNavigation';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import LoginScreen from '../screens/authentications/LoginScreen';
-import { AuthContext } from '../screens/authentications/AuthContext';
-import SignupScreen from '../screens/authentications/SignupScreen';
-import LogoutScreen from '../screens/authentications/LogoutScreen';
+// import LoginScreen from '../screens/authentications/LoginScreen';
+// import { AuthContext } from '../screens/authentications/AuthContext';
+// import SignupScreen from '../screens/authentications/SignupScreen';
+// import LogoutScreen from '../screens/authentications/LogoutScreen';
 
 const Tab = createBottomTabNavigator();
 
 const NavigationBottom = () => {
     const colorScheme = useColorScheme();
-    const authContext = useContext(AuthContext); // Access AuthContext for authentication state
+    // const authContext = useContext(AuthContext); 
 
-    if (!authContext) {
-        // Handle case where authContext is null
-        return null; // Or return a loading indicator, error message, or handle appropriately
-    }
+    // if (!authContext) {
+    //     // Handle case where authContext is null
+    //     return null; // Or return a loading indicator, error message, or handle appropriately
+    // }
 
     return (
         <Tab.Navigator
@@ -64,7 +64,7 @@ const NavigationBottom = () => {
                     ),
                 }}
             />
-            {!authContext.user ? (
+            {/* {!authContext.user ? (
                 <>
                     <Tab.Screen
                         name="Signup"
@@ -95,7 +95,7 @@ const NavigationBottom = () => {
                         ),
                     }}
                 />
-            )}
+            )} */}
         </Tab.Navigator>
     );
 };
