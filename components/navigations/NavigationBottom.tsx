@@ -27,6 +27,13 @@ const NavigationBottom = () => {
                 headerShown: false,
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 tabBarShowLabel: false,
+                tabBarStyle: {
+                    display: "flex",
+                    alignItems: "center",
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    height: 60,
+                  },
             }}
         >
             <Tab.Screen
