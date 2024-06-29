@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 
 type RootStackParamList = {
     Home: undefined;
@@ -18,7 +19,7 @@ const LogoutScreen = () => {
     const handleLogout = async () => {
         if (authContext) {
             await authContext.logout();
-            navigation.navigate('Home'); // Navigate to the Home screen after logout
+            navigation.dispatch(StackActions.replace('Dashboard')); // Ensure 'Home' is correctly defined
         }
     };
 

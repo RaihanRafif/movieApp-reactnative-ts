@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTheme } from '../ThemeContext';
 
 type RootStackParamList = {
     'Movies By Category': { categoryId: number };
@@ -17,7 +16,6 @@ const CategorySearchScreen = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    const { colors } = useTheme();
 
     useEffect(() => {
         getCategories();
@@ -66,8 +64,8 @@ const CategorySearchScreen = () => {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-            <TouchableOpacity style={[styles.searchButton, { backgroundColor: colors.tabIconSelected }]} onPress={handleSearch}>
-                <Text style={[styles.searchButtonText, { backgroundColor: colors.tabIconSelected }]}>Search</Text>
+            <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+                <Text style={[styles.searchButtonText]}>Search</Text>
             </TouchableOpacity>
         </View>
     );
@@ -105,11 +103,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         marginTop: 10,
+        backgroundColor: '#0a7ea4',
     },
     searchButtonText: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
+        backgroundColor: '#0a7ea4',
     },
 });
 

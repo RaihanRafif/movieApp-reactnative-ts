@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
-import { useTheme } from '../ThemeContext'; // Import the useTheme hook
+import { useTheme } from '../ThemeContext';
+import { AuthContext } from './authentications/AuthContext';
 
 const screenWidth = Dimensions.get('window').width;
 const movieContainerWidth = (screenWidth - 40) / 3; // 40 is for padding and margin adjustments
@@ -17,14 +18,25 @@ type Movie = {
   vote_average: number;
 };
 
-export default function FavoriteScreen() {
+const FavoriteScreen = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const navigation = useNavigation();
-  const { colors } = useTheme(); // Get the colors from the theme
+  const { colors } = useTheme();
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    return null;
+  }
+
+  useEffect(() => {
+    if (!authContext?.user) {
+      setMovies([]); // Clear movies state if user is not logged in
+    }
+  }, [authContext?.user]);
 
   const getFavorite = async () => {
     try {
-      const moviesFavorite = await AsyncStorage.getItem('@FavoriteList');
+      const moviesFavorite = await AsyncStorage.getItem(`@FavoriteList_${authContext.user}`);
 
       if (moviesFavorite) {
         const parsedMovies = JSON.parse(moviesFavorite) as Movie[];
@@ -39,8 +51,12 @@ export default function FavoriteScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      getFavorite();
-    }, [])
+      if (authContext?.user) {
+        getFavorite();
+      } else {
+        setMovies([]);
+      }
+    }, [authContext?.user])
   );
 
   return (
@@ -134,3 +150,5 @@ const styles = StyleSheet.create({
     color: "#a0a0a0",
   },
 });
+
+export default FavoriteScreen;

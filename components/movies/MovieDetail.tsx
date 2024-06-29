@@ -191,6 +191,7 @@ const MovieDetail: React.FC<MovieDetailProps> = ({ route }) => {
                 </Text>
               </View>
             </View>
+            <View style={styles.separate}></View>
             <MovieList
               title={'Recommendation'}
               path={`movie/${id}/similar`}
@@ -256,6 +257,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 15,
     fontStyle: 'italic',
+    textAlign: 'justify'
   },
   detailMovieContainer: {
     flexDirection: 'row',
@@ -276,6 +278,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'italic',
   },
+  separate: {
+    height: 30
+  }
 });
 
 export default MovieDetail;
