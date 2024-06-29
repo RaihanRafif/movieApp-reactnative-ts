@@ -85,7 +85,7 @@ const KeywordSearchScreen = () => {
                 data={movies}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderMovieItem}
-                ListEmptyComponent={<Text>No movies found</Text>}
+                ListEmptyComponent={<Text style={styles.noMovieTitle}>No movies found.</Text>}
             />
         </View>
     );
@@ -125,6 +125,11 @@ const styles = StyleSheet.create({
     movieRating: {
         fontSize: 14,
         color: '#666',
+    },
+    noMovieTitle: {
+        fontSize: 18,
+        color: "#a0a0a0",
+        textAlign: 'center',
     },
 });
 
