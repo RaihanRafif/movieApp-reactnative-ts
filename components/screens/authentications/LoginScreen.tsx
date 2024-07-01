@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useTheme } from '@/components/ThemeContext';
 
@@ -42,9 +42,16 @@ const LoginScreen = ({ navigation }: any) => {
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <Button title="Login" onPress={handleLogin} />
+            <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
+                <Text style={styles.loginButtonText}>Logout</Text>
+            </TouchableOpacity>
+
             <Text style={[styles.signupText, { color: colors.text }]}>Has no account?</Text>
-            <Button title="Sign Up" onPress={handleSignUp} />
+
+            <TouchableOpacity onPress={handleSignUp} style={styles.loginSignUp}>
+                <Text style={styles.loginSignUpText}>Logout</Text>
+            </TouchableOpacity>
+            {/* <Button title="Sign Up" onPress={handleSignUp} /> */}
         </View>
     );
 };
@@ -71,6 +78,28 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 16,
         marginBottom: 10,
+    },
+    loginButton: {
+        backgroundColor: '#007bff',
+        borderRadius: 10, 
+        paddingVertical: 15,
+        paddingHorizontal: 40, 
+    },
+    loginButtonText: {
+        fontSize: 16,
+        color: '#ffffff',
+        fontWeight: 'bold',
+    },
+    loginSignUp: {
+        backgroundColor: '#007bff',
+        borderRadius: 10, 
+        paddingVertical: 15,
+        paddingHorizontal: 40, 
+    },
+    loginSignUpText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 

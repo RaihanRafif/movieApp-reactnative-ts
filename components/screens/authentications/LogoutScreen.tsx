@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
@@ -25,7 +25,9 @@ const LogoutScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Button title="Logout" onPress={handleLogout} />
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+                <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -35,6 +37,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    logoutButton: {
+        backgroundColor: '#007bff',
+        borderRadius: 10, 
+        paddingVertical: 15,
+        paddingHorizontal: 40, 
+    },
+    logoutButtonText: {
+        fontSize: 16,
+        color: '#ffffff',
+        fontWeight: 'bold',
     },
 });
 
